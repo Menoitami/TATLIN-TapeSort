@@ -52,7 +52,7 @@ void clearTempDirectory() {
             std::filesystem::remove(entry.path());
         }
         
-        std::cout << "Temporary files and directory removed.\n";
+        std::cout << "Temporary files removed.\n";
     } else {
         std::cerr << "Temp directory does not exist.\n";
     }
@@ -66,8 +66,8 @@ int main(int argc, char** args) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    if (argc < 4) {
-        std::cout << "Usage: <data.txt> <output.txt> <n> \n";
+    if (argc < 3) {
+        std::cout << "Usage: <data.txt> <output.txt>\n";
         return 1;
     }
 
@@ -80,15 +80,7 @@ int main(int argc, char** args) {
 
 
     std::string fileName = args[1];
-    const int N = algorithms::TapeAlgorithms::largestPowerOfTwo(std::stoi(args[3]));
-
-    if (N<8){
-        std::cerr<<"n must be greater than 8";
-        return 1;
-
-    }
-
-    int K = N/4;
+    
 
     std::ifstream inputFile(fileName, std::ios::in);
     if (!inputFile.is_open()) {
@@ -109,6 +101,16 @@ int main(int argc, char** args) {
 
     inputFile.clear();
     inputFile.seekg(0, std::ios::beg);
+
+    int N = algorithms::TapeAlgorithms::largestPowerOfTwo(totalNumbers/4);
+
+
+    if (totalNumbers<4){
+        std::cerr<<"Must more than 3 number in file";
+        return 1;
+    }
+
+    int K = N;
 
     static int fileCounter = 0;
     Tape<int> tape1, out, m1, m2;
@@ -187,9 +189,9 @@ int main(int argc, char** args) {
                 minIt = it;
             }
         }
-
+        tape1.write((*minIt)->currentNumber);
         
-        outputMergedFile << (*minIt)->currentNumber << "\n";
+        outputMergedFile << tape1.read() << "\n";
         ++processedCount;
 
         if (!(*minIt)->readNext()) {

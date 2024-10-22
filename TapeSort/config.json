@@ -1,0 +1,5 @@
+{
+    "read_delay_us": 250,
+    "write_delay_us": 250,
+    "move_delay_us": 250
+}
